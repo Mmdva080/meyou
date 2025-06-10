@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عاشقانه من</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lalezar&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lalezar', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            color: #fff;
+            transition: background 1.5s ease;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body.authenticated {
+            animation: none;
+        }
+
+        body.authenticated::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('meyou.jpeg') center/cover no-repeat;
+            background-attachment: fixed;
+            z-index: -1;
+        }
+
+        @media (max-width: 768px) {
+            body.authenticated::before {
+                background-attachment: scroll;
+                background-size: cover;
+                background-position: center center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body.authenticated::before {
+                background-size: auto 100%;
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .login-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: all 0.5s ease;
+            z-index: 100;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .login-container h1 {
+            font-family: 'Dancing Script', cursive;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            color: #fff;
+        }
+        
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .login-container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .login-container input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .login-container button {
+            background: #fff;
+            color: #e73c7e;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-container button:hover {
+            background: #e73c7e;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translate(-50%, -50%) scale(0.7);
+        }
+        
+        .content {
+            display: none;
+            padding: 40px 20px;
+            text-align: center;
+            animation: fadeIn 1s ease forwards;
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .heart {
+            position: fixed;
+            pointer-events: none;
+            animation: float 4s ease-in-out infinite;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        .header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            margin: 30px 0;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .message {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 600px;
+            animation: slideIn 1s ease forwards;
+            line-height: 1.8;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-size: 1.1rem;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .footer {
+            margin: 60px auto 40px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards;
+            background: rgba(0, 0, 0, 0.6);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            max-width: 80%;
+        }
+        
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 30px auto;
+            overflow: hidden;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite alternate;
+        }
+        
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            to {
+                transform: scale(1.05);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            }
+        }
+        
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(231, 60, 126, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-size: 24px;
+            transform: translateX(100px);
+        }
+        
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        
+        .scroll-top:hover {
+            background: rgba(231, 60, 126, 1);
+            transform: translateX(0) translateY(-5px) !important;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                font-size: 2rem;
+                margin: 20px 0;
+            }
+            
+            .message {
+                padding: 15px;
+                margin: 20px auto;
+                font-size: 1rem;
+                max-width: 90%;
+            }
+            
+            .photo-frame {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .footer {
+                font-size: 1.2rem;
+                margin: 40px auto 30px;
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+                margin: 0 10px;
+            }
+
+            .login-container h1 {
+                font-size: 1.8rem;
+            }
+
+            .header {
+                font-size: 1.6rem;
+            }
+
+            .message {
+                font-size: 0.9rem;
+                padding: 12px;
+                margin: 15px auto;
+            }
+
+            .photo-frame {
+                width: 120px;
+                height: 120px;
+            }
+
+            .footer {
+                font-size: 1rem;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div class="login-container" id="loginContainer">
+        <h1>عاشقانه من</h1>
+        <input type="text" id="nameInput" placeholder="اسم خود را وارد کنید">
+        <button onclick="checkName()">ورود</button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content" id="mainContent">
+        <h1 class="header">دختر کوچولوی ممد</h1>
+        
+        <div class="photo-frame">
+            <img src="meyou.jpeg" alt="ما با هم">
+        </div>
+        
+        <div class="message">
+            <p>مائده جونم،</p>
+            <p>از همون روز اولی که دیدمت میدونستم تو همونی که دنبالش میگشتم.</p>
+            <p>همه چی با تو قشنگه، حتی سکوتامون باهم!</p>
+            <p>دلم میخواد همیشه کنارت باشم و از این خوشبختی لذت ببریم.</p>
+            <p>فقط تو توی قلب منی...</p>
+        </div>
+        
+        <div class="message">
+            <p>هر روزی که با تو میگذره برام یه دنیا خاطره قشنگ میسازه.</p>
+            <p>امیدوارم همیشه لبخند روی لبات بمونه و هیچوقت ناراحت نشی.</p>
+        </div>
+
+        <div class="message">
+            <p>مائده عزیزم،</p>
+            <p>وقتی نگاهت میکنم همه مشکلاتو فراموش میکنم...</p>
+            <p>تو آرومش منی و همیشه توی حضور تو احساس امنیت میکنم.</p>
+            <p>بهترین اتفاق زندگیم بودی!</p>
+        </div>
+
+        <div class="message">
+            <p>یادت نره همیشه پشتت هستم...</p>
+            <p>همه عمر میخوام باهات باشم و ازت مراقبت کنم.</p>
+        </div>
+
+        <div class="footer">
+            <p>همیشه مال تو میمونم، ممد</p>
+        </div>
+    </div>
+
+    <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+        ↑
+    </div>
+
+    <script>
+        function createHearts() {
+            const colors = ['#ff3366', '#ff6666', '#ff9999', '#ffcccc'];
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 6 + 3) + 's';
+                heart.style.animationDelay = (Math.random() * 2) + 's';
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(heart);
+            }
+        }
+
+        function checkName() {
+            const nameInput = document.getElementById('nameInput').value.trim();
+            const loginContainer = document.getElementById('loginContainer');
+            const mainContent = document.getElementById('mainContent');
+            const body = document.body;
+
+            if (nameInput.toLowerCase() === 'دختر کوچولوی ممد' || nameInput.toLowerCase() === 'مائده') {
+                loginContainer.classList.add('hidden');
+                setTimeout(() => {
+                    loginContainer.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    body.classList.add('authenticated');
+                    createHearts();
+                }, 500);
+            } else {
+                alert('فقط دختر کوچولوم میتونه وارد بشه!');
+                document.getElementById('nameInput').value = '';
+                document.getElementById('nameInput').focus();
+            }
+        }
+
+        document.getElementById('nameInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkName();
+            }
+        });
+
+        window.addEventListener('scroll', function() {
+            const scrollTopBtn = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Handle orientation change for better mobile experience
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 0);
+            }, 100);
+        });
+
+        // Prevent zoom on input focus for iOS
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            document.addEventListener('DOMContentLoaded', function() {
+                const inputs = document.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.addEventListener('focus', function() {
+                        if (input.style.fontSize !== '16px') {
+                            input.style.fontSize = '16px';
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+</body>
+</html>
